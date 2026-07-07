@@ -1,18 +1,17 @@
-var divBD = document.querySelector("#BD"); // récupération de l'emplacement des BDs
-var divModal = document.querySelector("#MODALS"); // récupération de l'emplacment des modals
-var lucReq = new XMLHttpRequest(); // objet pour fair eles requêtes http
+const divBD = document.querySelector("#BD"); // récupération de l'emplacement des BDs
+const divModal = document.querySelector("#MODALS"); // récupération de l'emplacment des modals
+const lucReq = new XMLHttpRequest(); // objet pour faire les requêtes http
 
 // magouilles pour que ça se passe bien xD
+let allSeries = [];
 if (localStorage['allSeries'] === undefined) {
   // tableau pour stocker les BDs (objets)
   localStorage['allSeries'] = "";
-  var allSeries = [];
 } else {
   try {
-    var allSeries = JSON.parse(localStorage['allSeries']);
+    allSeries = JSON.parse(localStorage['allSeries']);
   } catch (e) {
     localStorage['allSeries'] = "";
-    var allSeries = [];
   }
 }
 
@@ -22,76 +21,77 @@ lucReq.responseType = "document"; // on veut une réponse de type "document"
 // traitement des données
 lucReq.onreadystatechange = async function(e) {
   // quand la page a finie de load (c'pas tout a fait vrai mais bon)
-  if (this.readyState == 4){
-    var documentLuc = lucReq.response; // récupération de la page
+  if (this.readyState === 4){
+    const documentLuc = lucReq.response; // récupération de la page
     // on cherche le tableau qui contient les séries et on récupère toutes les lignes
-    var lines = documentLuc.querySelector("table").querySelector("tbody").querySelectorAll("tr");
+    const lines = documentLuc.querySelector("table").querySelector("tbody").querySelectorAll("tr");
     // on parcour les lignes
     lines.forEach(line => {
-      var Serie  = {}; // objet Serie qui sera stocké dans le tableau
+      const Serie = {}; // objet Serie qui sera stocké dans le tableau
 
-      // on stock tous les éléments dans une variable (au cas ou)
-      var items = line.querySelectorAll("td");
+      // on stock tous les éléments dans une variable (au cas où)
+      const items = line.querySelectorAll("td");
       if (items[0].querySelector(".ico").querySelector("img").getAttribute("src").endsWith("France.png")) {
 
         // on récupère son nom ça peut être bien
-        var name = items[0].querySelector(".serie").innerText;
+        const name = items[0].querySelector(".serie").innerText;
 
         // Si la série est déjà enregistré en local, ça sert à rien de refaire une requête dessus (et si y a pas de nouvelle sortie)
         if (allSeries.find(serie => serie.name === name) === undefined || allSeries.find(serie => serie.name === name).dateFin !== parseInt(items[2].innerText.replace(/\D/g, ""), 10) || allSeries.find(serie => serie.name === name).BDs === undefined) {
           Serie.name = name; // on ajoute l'attribut "name"
 
           // on récupère le lien pour avoir des infos sur la série en question
-          var link = items[0].querySelector(".serie").querySelector("a").getAttribute("href");
+          let link = items[0].querySelector(".serie").querySelector("a").getAttribute("href");
           link = link.replace(".html", "__10000.html"); // on ajoute "__10000" pour avoir toutes les BDs sur la page
           Serie.link = link; // on remplit l'objet en ajoutant l'attribut "link"
 
           // on récupère la date de début de sortie (pour faire un trie plus tard)
-          var dateDeb = items[1].innerText;
+          let dateDeb = items[1].innerText;
           dateDeb = dateDeb.replace(/\D/g, ""); // il y avait un truc bizarre dans la string du coup je fais en sorte de récupérer que les chiffres
           Serie.dateDeb = parseInt(dateDeb, 10); // on ajoute l'attribut "dateDeb" converti en int
 
           // on récupère la date de fin de sortie (pour vérifier plus tard qu'il n'y a pas une nouvelle BD)
-          var dateFin = items[2].innerText;
+          let dateFin = items[2].innerText;
           dateFin = dateFin.replace(/\D/g, ""); // il y avait un truc bizarre dans la string du coup je fais en sorte de récupérer que les chiffres
           Serie.dateFin = parseInt(dateFin, 10); // on ajoute l'attribut "dateFin" converti en int
 
           // récupération des données sur la BD
-          var bdReq = new XMLHttpRequest();
+          const bdReq = new XMLHttpRequest();
           bdReq.open("GET", link, true);
           bdReq.responseType = "document";
           bdReq.onreadystatechange = async function (e) {
-            if (this.readyState == 4){
-              var documentBD = bdReq.response; // page de la BD
-              var allNodes = Array.prototype.slice.call(documentBD.querySelector(".liste-albums").childNodes); // on récupère la liste des BDs \...
-              var listBDs = allNodes.filter(item => item.nodeName === "LI"); // ...\
-              var linkImg = ""; // on prépare la variable
+            if (this.readyState === 4){
+              const documentBD = bdReq.response; // page de la BD
+              const allNodes = Array.prototype.slice.call(documentBD.querySelector(".liste-albums").childNodes); // on récupère la liste des BDs \...
+              const listBDs = allNodes.filter(item => item.nodeName === "LI"); // ...\
+              let linkImg = ""; // on prépare la variable
               Serie.BDs = []; // on prépare la liste des BDs de la série
               // on parcour la liste pour chopper des infos sur les BDs
               let findImg = false;
-              for (var i = 0; i < listBDs.length; i++) {
+              for (let i = 0; i < listBDs.length; i++) {
                 await until(_ => listBDs[i].querySelector(".infos") != null);
                 await until(_ => listBDs[i].querySelector(".infos").children.length > 0);
 
-                // on s'en occupe que si c'est un BD de luc
+                // on s'en occupe que si c'est une BD de luc
                 if(listBDs[i].querySelector(".infos").innerText.includes("Brunschwig, Luc")){
                   let BD = {}; // on prépare l'objet BD qui va être ajouté à la liste
                   let albumMain = listBDs[i].querySelector(".album-main");
-                  // récupération de l'image de couv (du tome 1 ou du tome fait par Luc)
-                  if (!findImg){
-                    linkImg = listBDs[i].querySelector(".couv").querySelector("img").getAttribute("src");
-                    findImg = true;
-                  }
                   // récupération du titre de la BD (et j'vire les espèces de blanc bizarre 🤔)
                   let name = albumMain.querySelector(".titre").querySelector("span").innerText.split(".");
                   BD.name = name[name.length-1].trim();
                   // récupération de la couv'
-                  BD.img = listBDs[i].querySelector(".couv").querySelector("img").getAttribute("src");
+                  const imgs = listBDs[i].querySelector(".couv").querySelectorAll("img");
+                  BD.img = imgs[imgs.length - 1].getAttribute("src");
+                  // récupération de l'image de couv (du tome 1 ou du tome fait par Luc)
+                  if (!findImg){
+                    linkImg = BD.img;
+                    findImg = true;
+                  }
                   // récupération de la note
                   BD.note = albumMain.querySelector(".eval").querySelector(".message").innerText;
 
                   // on parcour les éléments
-                  albumMain.querySelector(".infos").querySelectorAll("li").forEach(async li => {
+                  for (const li of albumMain.querySelector(".infos").querySelectorAll("li")) {
                     // on récupère l'éditeur
                     if (li.querySelector("label").innerText === "Editeur : "){
                       BD.editeur = li.querySelector("span").innerText;
@@ -101,7 +101,7 @@ lucReq.onreadystatechange = async function(e) {
                     if (li.querySelector("label").innerText === "Collection : "){
                       BD.collection = li.querySelector("a").innerText;
                     }
-                  });
+                  }
                   // ajout de la BD dans la série
                   Serie.BDs.push(BD);
                 }
@@ -109,7 +109,7 @@ lucReq.onreadystatechange = async function(e) {
               // await until(_ => linkImg != "");
               linkImg = linkImg.replace("cache/thb_couv", "media/Couvertures"); // on arrange l'URL pour avoir l'image en grand
               Serie.img = linkImg; // on ajoute l'attribut "img"
-              allSeries.push(Serie); // on ajoute la BD au tableau
+              allSeries.push(Serie); // on ajoute la série au tableau
             }
           }
           bdReq.send();
@@ -138,7 +138,7 @@ lucReq.send();
 
 
 async function ShowBDs(series) {
-  for (var i = 0; i < series.length; i++) {
+  for (let i = 0; i < series.length; i++) {
     divBD.innerHTML += `<div class="col-lg-2 text-center text-break" data-bs-toggle="modal" data-bs-target="#bd${i}">
         <img class="rounded" src="${series[i].img}" alt="${series[i].name}">
         <p>${series[i].name}</p>
@@ -174,24 +174,24 @@ async function ShowBDs(series) {
       </div>
     </div>`
 
-    for (var j = 0; j < series[i].BDs.length; j++) {
+    for (let j = 0; j < series[i].BDs.length; j++) {
       divModal.querySelector(`#bd${i}`).querySelector(".BDs").innerHTML += `
         <h3 class="mt-2">${series[i].BDs[j].name}</h3>
         <div class="row">
           <div class="col-lg-6">
-            <img class="bd-modal-img" src="${series[i].BDs[j].img}">
+            <img class="bd-modal-img" src="${series[i].BDs[j].img}" alt="image de couverture du tome">
           </div>
           <div class="col-lg-6">
             <div class="bd-modal-txt">
               <p>${series[i].BDs[j].note}</p>
-              <p>Editeur : ${series[i].BDs[j].editeur}</p>`
+              <p>Éditeur : ${series[i].BDs[j].editeur}</p>`
         +    (series[i].BDs[j].collection !== undefined?`<p>Collection : ${series[i].BDs[j].collection}</p>`:"")
         +  `</div>
           </div>
         </div>`;
     }
   }
-  var divLoad = divBD.querySelector(".lds-ring"); // récupération de la div de chargement (pour la delete après)
+  const divLoad = divBD.querySelector(".lds-ring"); // récupération de la div de chargement (pour la delete après)
   divLoad.remove(); // delete le load
 }
 

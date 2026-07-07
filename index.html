@@ -366,12 +366,12 @@
 
         <br>
 
-        <center>
-          <iframe class="rounded" width="560" height="315" src="https://www.youtube-nocookie.com/embed/p15qkWFuKz4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div style="text-align: center;">
+          <iframe class="rounded" width="560" height="315" src="https://www.youtube-nocookie.com/embed/p15qkWFuKz4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           <figcaption class="blockquote-footer">
-            Interview réalisé par Némo le 19/06/2021 <cite title="Source Title"><a href="https://discord.gg/N49Gxsu">Warriors Army Corp</a></cite>
+            Interview réalisé par Némo le 19/06/2021 <cite title="Source Title"><a href="https://www.youtube.com/@WarriorsArmyCorp">Warriors Army Corp</a></cite>
           </figcaption>
-        </center>
+        </div>
       </section>
 
       <section id="Story-section">
@@ -417,7 +417,7 @@
             <li class="nav-item dropdown">
             </li>
           </ul>
-          <div class="rounded interview interview-dark" id="Story" style="border: 0px; max-height: 640px; width: 100%;">
+          <div class="rounded interview interview-dark" style="border: 0; max-height: 640px; width: 100%;">
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade" id="lpdi-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
                 <div class="banner" style='background-image: url("images/Joshua.jpg");'></div>
@@ -723,7 +723,7 @@
                 </p>
                 <figure class="interview-img-right text-center">
                   <img class="rounded" src="images/urbangames.jpg" alt="Planche de Urban Games" style="width: 100%;">
-                  <figcaption class="text-secondary" style="margin-bottom: 0px;"><cite title="Source Title">Urban Games</cite></figcaption>
+                  <figcaption class="text-secondary" style="margin-bottom: 0;"><cite title="Source Title">Urban Games</cite></figcaption>
                 </figure>
                 <p>
                   Le premier projet que je lui propose, c’est Urban Games (ça y est, on y arrive). Ça fait 5 ans que Delcourt l’a entre les mains, qu’il n’arrive à rien, je commence à me dire qu’il est plus que temps d’explorer de nouvelles pistes. Et puis, Urban, c’est un récit de SF et les Humanos, ben, c’est ce qu’on faisait de mieux dans le genre à l'époque.
@@ -804,7 +804,7 @@
                 </p>
                 <figure class="interview-img-right text-center">
                   <img class="rounded" src="images/urban-serge.jpg" alt="Recherche Urban par Serge Pellé" style="width: 100%;">
-                  <figcaption class="text-secondary" style="margin-bottom: 0px;"><cite title="Source Title">Recherche de Serge Pellé</cite></figcaption>
+                  <figcaption class="text-secondary" style="margin-bottom: 0;"><cite title="Source Title">Recherche de Serge Pellé</cite></figcaption>
                 </figure>
                 <p>
                   J’ai tenté quelques approches : Serge Pellé (dont certaines recherches pour Urban lui ont permis de mettre en place l’univers d’Orbital qu’il signe aujourd’hui avec Sylvain Runberg chez Dupuis), David Nouhaud (dont je scénarise la série Car l'Enfer est Ici), Daniel Acuna (brillant dessinateur espagnol travaillant pour DC et Marvel) et Niko Henrichon (l’excellent dessinateur chez DC de Pride of Bagdad)…
@@ -886,7 +886,7 @@
                 </p>
                 <figure class="interview-img-right text-center">
                   <img class="rounded" src="images/lmdlp-planche-abandonnée.jpg" alt="Planche abandonnée" style="width: 100%;">
-                  <figcaption class="text-secondary" style="margin-bottom: 0px;"><cite title="Source Title">Planche abandonnée</cite></figcaption>
+                  <figcaption class="text-secondary" style="margin-bottom: 0;"><cite title="Source Title">Planche abandonnée</cite></figcaption>
                 </figure>
                 <p>
                   De leur côté, mon oncle et mon grand-père ont été envoyés dans le camp de transit de Beaune la Rolande (géré par des Français) avant d’être placés quelques jours plus tard dans un convoi à destination du camp d’Auschwitz qui vient de passer du statut de camp de prisonniers politique à celui de camp d’extermination. Ils feront partis des tous premiers convois gazés dès leur arrivée.
@@ -943,7 +943,7 @@
                 <h3 class="mt-3">LES FRERES RUBINSTEIN</h3>
                 <figure class="interview-img-left text-center">
                   <img class="rounded" src="images/lfr-recherche-couv.jpg" alt="Recherche de couverture" style="width: 100%;">
-                  <figcaption class="text-secondary" style="margin-bottom: 0px;"><cite title="Source Title">Recherche de couverture</cite></figcaption>
+                  <figcaption class="text-secondary" style="margin-bottom: 0;"><cite title="Source Title">Recherche de couverture</cite></figcaption>
                 </figure>
                 <p>
                   Ce n’est pas exactement ce qu’on peut appeler un projet récent (chez moi, ce sont rarement des projets récents. Plutôt des trucs qui mûrissent depuis des décennies dans ma caboche).<br>
@@ -1020,11 +1020,11 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
 
-    <script src="script.js" type="text/javascript"></script>
-    <script src="nav-script.js" type="text/javascript"></script>
-    <script src="nav-tabs-script.js" type="text/javascript"></script>
+    <script src="scripts/script.js" type="text/javascript"></script>
+    <script src="scripts/nav-script.js" type="text/javascript"></script>
+    <script src="scripts/nav-tabs-script.js" type="text/javascript"></script>
     <script type="text/javascript">
-      var theme = "";
+      let theme = "";
       if (localStorage['theme'] === undefined) {
         // tableau pour stocker les BDs (objets)
         localStorage['theme'] = "darkTheme";
@@ -1120,7 +1120,7 @@
       }
 
       const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
-      const popoverList = [...popoverTriggerList].map(popoverTriggerEl => {
+      [...popoverTriggerList].map(popoverTriggerEl => {
         new bootstrap.Popover(popoverTriggerEl);
         popoverTriggerEl.addEventListener('shown.bs.popover', () => {
           let popovers = document.querySelectorAll(".popover");
