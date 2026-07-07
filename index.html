@@ -993,7 +993,7 @@
             </a>
           </div>
 
-          <small class="align-self-end mt-5">Copyright © Luc Brunschwig - 2022</small>
+          <small class="align-self-end mt-5">Copyright © Luc Brunschwig - <span id="year"></span></small>
           <small><i class="fa-solid fa-code"></i> with <i class="fa-solid fa-heart"></i> by <a href="https://nemo-brunschwig.github.io/" class="link-light"><b>Némo Brunschwig</b></a></small>
         </div>
       </section>
@@ -1154,5 +1154,12 @@
 
       });
     </script>
+  <script type="text/javascript">
+    // copyright year
+    let copyright_year = document.querySelector("#year");
+    let date_year = new Date();
+    date_year = date_year.getFullYear();
+    copyright_year.innerText = date_year;
+  </script>
   </body>
 </html>
